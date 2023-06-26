@@ -29,3 +29,10 @@ json_geocode = json.loads(results_json)
 # Prints the latitude, longitude, and address
 pprint(json_geocode[0]['geometry']['location'])
 pprint(json_geocode[0]['formatted_address'])
+
+
+# # get current IP, but it's public IP so not super accurate
+# import geocoder
+
+# g = geocoder.ip('me')
+# print(g.latlng)
