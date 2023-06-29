@@ -1,8 +1,5 @@
-import leafmap.leafmap as leafmap
-
-filepath = "https://raw.githubusercontent.com/opengeos/leafmap/master/examples/data/us_cities.csv"
-
 import leafmap.foliumap as leafmap
+filepath = "https://raw.githubusercontent.com/opengeos/leafmap/master/examples/data/us_cities.csv"
 
 m = leafmap.Map(tiles='stamentoner')
 m.add_heatmap(
