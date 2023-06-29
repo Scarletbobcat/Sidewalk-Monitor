@@ -1,38 +1,22 @@
-from datetime import datetime
-import googlemaps
-from pprint import pprint
-import json
-from dotenv import load_dotenv, find_dotenv
-import os
+import leafmap.leafmap as leafmap
 
-#finds .env file and loads it
-load_dotenv(find_dotenv())
+filepath = "https://raw.githubusercontent.com/opengeos/leafmap/master/examples/data/us_cities.csv"
 
-#saves google key from .env file
-gKey = os.environ.get("GOOGLE_KEY")
+import leafmap.foliumap as leafmap
 
-#creates connection to googlemaps api
-gmaps = googlemaps.Client(key = f"{gKey}")
+m = leafmap.Map(tiles='stamentoner')
+m.add_heatmap(
+    filepath,
+    latitude="latitude",
+    longitude='longitude',
+    value="pop_max",
+    name="Heat map",
+    radius=20,
+)
+m
 
-#gets information from api as json
-geocode_result = gmaps.geocode('1819 5th Avenue, Youngstown, OH')
+# # colorbar for our real map
+# colors = ['red', 'lime', 'blue']
+# m.add_colorbar(colors = colors, vmin = 0, vmax = 5)
 
-#makes json into readable string
-results_json = json.dumps(geocode_result)
-
-#loads json
-json_geocode = json.loads(results_json)
-
-# This prints the return json into a readable format
-# pprint(json_geocode[0])
-
-# Prints the latitude, longitude, and address
-pprint(json_geocode[0]['geometry']['location'])
-pprint(json_geocode[0]['formatted_address'])
-
-
-# # get current IP, but it's public IP so not super accurate
-# import geocoder
-
-# g = geocoder.ip('me')
-# print(g.latlng)
+m.to_html("heatmap.html")
