@@ -1,6 +1,5 @@
 #include <TinyGPS++.h>
 #include <SD.h>
-#include <Wire.h>
 #include <SoftwareSerial.h>
 
 int CS = 10;
@@ -20,7 +19,7 @@ SoftwareSerial ss(RXPin, TXPin);
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(GPSBaud);
+  Serial.begin(115200);
   ss.begin(GPSBaud);
   SD.begin(10);
 
@@ -45,54 +44,69 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
+  // while(ss.available() > 0) {
+  //   if (gps.encode(ss.read())) {
+  //     if (gps.location.isValid()) {
+  //       Serial.println();
+  //       Serial.println("Input x: ");
+  //       while (!Serial.available());
+  //       character = Serial.read();
+  //       Serial.print("Character: ");
+  //       Serial.println(character);
+  //       displayInfo();
+  //       clearBuffer();
+  //     } else {
+  //       Serial.println("Invalid Location");
+  //     }
+  //   }
+  // }
+
   while (ss.available() > 0) {
     if (gps.encode(ss.read())) {
-      displayInfo();
+      // displayInfo();
       if (gps.location.isValid()) {
         // Continuously asks for rating of sidewalks while input is not x
-        do {
-          Serial.println();
-          Serial.println("Input x to record beginning point or e to exit:");
-          while (Serial.available() == 0) {
-          }
-          character = Serial.read();
-          Serial.print("Character: ");
-          Serial.println(character);
-          clearBuffer();
-          switch (character) {
-            case '\0':
+        Serial.println();
+        Serial.println("Input x to record point or e to exit:");
+        while (Serial.available() == 0) {
+        }
+        character = Serial.read();
+        Serial.print("Character: ");
+        Serial.println(character);
+        clearBuffer();
+        switch (character) {
+          case '\0':
+            break;
+          case 'x':
+            if (gps.location.age() <= 1500) {
+              data.print(gps.location.lat(), 8);
+              data.print(",");
+              data.print(gps.location.lng(), 8);
+              data.print(",");
+              Serial.println("Input rating of sidewalk from 0-5:");
+              int rating;
+              while (Serial.available() == 0) {
+              }
+              rating = Serial.read() - 48;
+              clearBuffer();
+              Serial.print("Rating: ");
+              Serial.println(rating);
+              data.println(rating);
+            }
               break;
-            case 'x':
-                displayInfo();
-                // data.print(gps.location.lat(), 8);
-                // data.print(",");
-                // data.print(gps.location.lng(), 8);
-                // data.print(",");
-                // Serial.println("Input rating of sidewalk from 0-5:");
-                // int rating;
-                // while (Serial.available() == 0) {
-                // }
-                // rating = Serial.read() - 48;
-                // clearBuffer();
-                // Serial.print("Rating: ");
-                // Serial.println(rating);
-                // data.println(rating);
-                break;
-            case 'e':
-              Serial.println("Closing...");
-              delay(100);
-              data.close();
-              exit(0);
-              break;
-            default:
-              Serial.println("Invalid Input");
-              break;
-          }
-          clearBuffer();
-        } while (character != 'e' || character != 'E');
+          case 'e':
+            Serial.println("Closing...");
+            delay(100);
+            data.close();
+            exit(0);
+            break;
+          default:
+            Serial.println("Invalid Input");
+            break;
+        }
+        clearBuffer();
       }
       delay(500);
-      // Serial.println();
     }
   }
 }
@@ -158,7 +172,7 @@ void clearBuffer() {
   while (Serial.available()) {
     Serial.read();
     Serial.end();
-    Serial.begin(9600);
+    Serial.begin(115200);
   }
 }
 

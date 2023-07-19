@@ -2,16 +2,16 @@ import leafmap.foliumap as leafmap
 
 
 # filepath is where the csv file for heatmap is
-filepath = "https://raw.githubusercontent.com/opengeos/leafmap/master/examples/data/us_cities.csv"
+filepath = "./DATA.CSV"
 
 
 # creating heatmap settings
 m = leafmap.Map(tiles='stamentoner')
 m.add_heatmap(
     filepath,
-    latitude="latitude",
-    longitude='longitude',
-    value="pop_max",
+    latitude="Latitude",
+    longitude='Longitude',
+    value="Rating",
     name="Heat map",
     radius=20,
 )
