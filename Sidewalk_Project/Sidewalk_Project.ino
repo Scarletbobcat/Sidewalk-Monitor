@@ -2,25 +2,23 @@
 #include <SD.h>
 #include <SoftwareSerial.h>
 
+// declaration of objects and variables
 int CS = 10;
 File data;
 TinyGPSPlus gps;
-char character = 'i';
+char character;
 char empty;
 
-//Setting up connection ports
-static const int RXPin = 4, TXPin = 3;
+// setting up connection ports
+static const int RXPin = 2, TXPin = 3;
 static const uint32_t GPSBaud = 9600;
 
 
-//Connecting arduino to GPS module
+// connecting arduino to GPS module
 SoftwareSerial ss(RXPin, TXPin);
 
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
-  ss.begin(GPSBaud);
   SD.begin(10);
 
   if (!SD.begin(10)) {
@@ -29,89 +27,83 @@ void setup() {
     while(1);
   }
 
+  // creates file if "data.csv" does not exist
   if (!SD.exists("data.csv")) {
     data = SD.open("data.csv", FILE_WRITE);
     data.println("latitude, longitude, rating");
     delay(100);
   } else {
     data = SD.open("data.csv", FILE_WRITE);
+    data.seek(EOF);
   }
 
+  Serial.begin(9600);
+  ss.begin(GPSBaud);
 }
 
 
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
-  // while(ss.available() > 0) {
-  //   if (gps.encode(ss.read())) {
-  //     if (gps.location.isValid()) {
-  //       Serial.println();
-  //       Serial.println("Input x: ");
-  //       while (!Serial.available());
-  //       character = Serial.read();
-  //       Serial.print("Character: ");
-  //       Serial.println(character);
-  //       displayInfo();
-  //       clearBuffer();
-  //     } else {
-  //       Serial.println("Invalid Location");
-  //     }
-  //   }
-  // }
-
+  // always reads gps data 
   while (ss.available() > 0) {
     if (gps.encode(ss.read())) {
-      // displayInfo();
+      displayInfo();
       if (gps.location.isValid()) {
-        // Continuously asks for rating of sidewalks while input is not x
-        Serial.println();
-        Serial.println("Input x to record point or e to exit:");
-        while (Serial.available() == 0) {
-        }
-        character = Serial.read();
-        Serial.print("Character: ");
-        Serial.println(character);
-        clearBuffer();
-        switch (character) {
-          case '\0':
-            break;
-          case 'x':
-            if (gps.location.age() <= 1500) {
-              data.print(gps.location.lat(), 8);
-              data.print(",");
-              data.print(gps.location.lng(), 8);
-              data.print(",");
-              Serial.println("Input rating of sidewalk from 0-5:");
-              int rating;
-              while (Serial.available() == 0) {
-              }
-              rating = Serial.read() - 48;
-              clearBuffer();
-              Serial.print("Rating: ");
-              Serial.println(rating);
-              data.println(rating);
-            }
+          // Continuously asks for rating of sidewalks while input is not x
+          Serial.println();
+          Serial.println("Input x to record point or e to exit:");
+          while (Serial.available() == 0) {
+          }
+          character = Serial.read();
+          Serial.print("Character: ");
+          Serial.println(character);
+          clearBuffer();
+          switch (character) {
+            // if nothing is entered
+            case '\0':
               break;
-          case 'e':
-            Serial.println("Closing...");
-            delay(100);
-            data.close();
-            exit(0);
-            break;
-          default:
-            Serial.println("Invalid Input");
-            break;
-        }
-        clearBuffer();
+            // if x is entered
+            case 'x':
+              //only writes data to csv if age of gps object is <= 1500
+              if (gps.location.age() <= 1500) {
+                data.print(gps.location.lat(), 8);
+                data.print(",");
+                data.print(gps.location.lng(), 8);
+                data.print(",");
+                // enter rating of sidewalk
+                Serial.println("Input rating of sidewalk from 0-5:");
+                int rating;
+                while (Serial.available() == 0) {
+                }
+                rating = Serial.read() - 48;
+                clearBuffer();
+                Serial.print("Rating: ");
+                Serial.println(rating);
+                data.println(rating);
+                ssBuffer();
+              } else {
+                Serial.println("Age > 1500");
+              }
+                break;
+            // closes file and exits program
+            case 'e':
+              // Serial.println("Closing...");
+              // delay(100);
+              data.close();
+              exit(0);
+              break;
+            // all other inputs
+            default:
+              Serial.println("Invalid Input");
+              break;
+          }
+          clearBuffer();
       }
-      delay(500);
     }
   }
 }
 
-
+// stolen from TinyGPSPlus example "Device Example"
 void displayInfo()
 {
   Serial.print(F("Location: ")); 
@@ -166,13 +158,20 @@ void displayInfo()
   Serial.println();
 }
 
+// attempting to clear software serial buffer
+void ssBuffer() {
+  while (ss.available() > 0) {
+    char dummy = ss.read();
+  }
+}
 
+// attempting to clear serial buffer
 void clearBuffer() {
   Serial.flush();
   while (Serial.available()) {
     Serial.read();
     Serial.end();
-    Serial.begin(115200);
+    Serial.begin(9600);
   }
 }
 
