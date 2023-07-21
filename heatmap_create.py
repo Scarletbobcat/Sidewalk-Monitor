@@ -2,7 +2,7 @@ import leafmap.foliumap as leafmap
 
 
 # filepath is where the csv file for heatmap is
-filepath = "./DATA.CSV"
+filepath = "./data.csv"
 
 
 # creating heatmap settings
