@@ -13,17 +13,12 @@ m.add_heatmap(
     longitude='Longitude',
     value="Rating",
     name="Heat map",
-    radius=20,
+    radius=15,
 )
 
 
 # creates heatmap
 m
-
-
-# # colorbar for our real map
-# colors = ['red', 'yellow', 'green']
-# m.add_colorbar(colors = colors, vmin = 0, vmax = 5)
 
 
 # saves heatmap to html in current directory
