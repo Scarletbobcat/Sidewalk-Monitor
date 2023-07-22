@@ -14,8 +14,9 @@ headers = next(csvreader)
 output_file.write("Latitude,Longitude,Rating\n")
 
 
-# #writes 5 points in between 2 points to output file
+#writes points in between 2 coordinates to output file
 for row in csvreader:
+    #reading in data
     data = []
     data = row
     lat1 = float(data[0])
