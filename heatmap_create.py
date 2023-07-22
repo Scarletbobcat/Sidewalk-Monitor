@@ -6,7 +6,7 @@ filepath = "./data.csv"
 
 
 # creating heatmap settings
-m = leafmap.Map(tiles='stamentoner')
+m = leafmap.Map()
 m.add_heatmap(
     filepath,
     latitude="Latitude",
@@ -22,4 +22,4 @@ m
 
 
 # saves heatmap to html in current directory
-m.to_html("heatmap.html")
+m.to_html("sidewalk_conditions.html")
