@@ -8,7 +8,7 @@ The parts that were used to create a gps tracker include an Arduino Uno R3, Ublo
 # How To Use
 Once all parts are correctly wired together, you will need to: 
 1. Import code into Arduino
-2. Wait outside until gps module gets signal
+2. Wait outside until gps module gets signal (can take a few minutes)
 3. Follow  instructions given through Serial Monitor on ArduinoIDE
     - enter x to record beginning point
     - enter v to record end point and rating of sidewalk
