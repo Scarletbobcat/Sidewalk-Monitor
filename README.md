@@ -12,3 +12,7 @@ Once all parts are correctly wired together, you will need to:
     - enter x to record beginning point
     - enter v to record end point and rating of sidewalk
     - enter e to exit program
+4. Once finished, plug microSD into laptop or computer and drag file into same directory as the python scripts
+5. run "csv_edit.py"
+6. run "heatmap_create.py"
+7. Navigate to directory that these scripts are in and open the html file titled "sidewalk_conditions.html"
