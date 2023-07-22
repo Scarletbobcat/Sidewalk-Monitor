@@ -33,6 +33,7 @@ void setup() {
     data.println("latitude, longitude, rating");
     data.println();
     delay(100);
+  // if "data.csv" exists, goes to end of file to begin writing
   } else {
     data = SD.open("data.csv", FILE_WRITE);
     data.seek(EOF);
@@ -42,18 +43,12 @@ void setup() {
   ss.begin(GPSBaud);
 }
 
-void menu() {
-  Serial.println();
-  Serial.println("x - record first point");
-  Serial.println("v - record end point");
-  Serial.println("e - exit program");
-}
-
 void loop() {
   // always reads gps data
   while (ss.available() > 0) {
     gps.encode(ss.read());
   }
+
   if (gps.location.isValid() && gps.location.isUpdated() && (gps.location.age() <= 1500)) {
     menu();
     while (Serial.available() == 0) {
@@ -62,8 +57,10 @@ void loop() {
     Serial.print("Character: ");
     Serial.println(character);
     clearBuffer();
+
     switch (character) {
-      // if x is entered
+
+      // if x is entered, write latitude and longitude
       case 'x':
         displayInfo();
         data.print(gps.location.lat(), 8);
@@ -72,6 +69,8 @@ void loop() {
         data.print(",");
         ssBuffer();
         break;
+
+      // if v is entered, write latitude, longitude, and rating
       case 'v':
         displayInfo();
         data.print(gps.location.lat(), 8);
@@ -90,11 +89,13 @@ void loop() {
         Serial.println(rating);
         data.println(rating);
         break;
+
       // closes file and exits program
       case 'e':
         data.close();
         exit(0);
         break;
+
       // all other inputs
       default:
         Serial.println("Invalid Input");
@@ -160,14 +161,14 @@ void displayInfo()
   Serial.println();
 }
 
-// attempting to clear software serial buffer
+// clears software serial buffer
 void ssBuffer() {
   while (ss.available() > 0) {
     char dummy = ss.read();
   }
 }
 
-// attempting to clear serial buffer
+// clears serial buffer
 void clearBuffer() {
   Serial.flush();
   while (Serial.available()) {
@@ -177,3 +178,10 @@ void clearBuffer() {
   }
 }
 
+// this prints the menu of the program
+void menu() {
+  Serial.println();
+  Serial.println("x - record first point");
+  Serial.println("v - record end point");
+  Serial.println("e - exit program");
+}
