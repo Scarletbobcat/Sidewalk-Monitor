@@ -52,6 +52,8 @@ void loop() {
   }
   if (gps.location.isValid() && gps.location.isUpdated() && (gps.location.age() <= 1500) && (gps.satellites.value() > 2)) {
     menu();
+
+    // reads character input from Serial Monitor
     while (Serial.available() == 0) {
     }
     character = Serial.read();
@@ -87,6 +89,11 @@ void loop() {
         myFile.println(rating);
         break;
 
+      // updates gps location
+      case 10:
+        Serial.println("Location updated!")
+        break;
+
       // closes file and exits program
       case 'e':
         myFile.close();
@@ -105,62 +112,6 @@ void loop() {
 }
 
 
-// // stolen from TinyGPSPlus example "Device Example"
-// void displayInfo()
-// {
-//   Serial.print(F("Location: ")); 
-//   if (gps.location.isValid())
-//   {
-//     Serial.print(gps.location.lat(), 6);
-//     Serial.print(F(","));
-//     Serial.print(gps.location.lng(), 6);
-//   }
-//   else
-//   {
-//     Serial.print(F("INVALID"));
-//   }
-
-//   Serial.print(F("  Date/Time: "));
-//   if (gps.date.isValid())
-//   {
-//     Serial.print(gps.date.month());
-//     Serial.print(F("/"));
-//     Serial.print(gps.date.day());
-//     Serial.print(F("/"));
-//     Serial.print(gps.date.year());
-//   }
-//   else
-//   {
-//     Serial.print(F("INVALID"));
-//   }
-
-//   Serial.print(F(" "));
-//   if (gps.time.isValid())
-//   {
-//     if (gps.time.hour() < 10) Serial.print(F("0"));
-//     Serial.print(gps.time.hour());
-//     Serial.print(F(":"));
-//     if (gps.time.minute() < 10) Serial.print(F("0"));
-//     Serial.print(gps.time.minute());
-//     Serial.print(F(":"));
-//     if (gps.time.second() < 10) Serial.print(F("0"));
-//     Serial.print(gps.time.second());
-//     Serial.print(F("."));
-//     if (gps.time.centisecond() < 10) Serial.print(F("0"));
-//     Serial.print(gps.time.centisecond());
-//   }
-//   else
-//   {
-//     Serial.print(F("INVALID"));
-//   }
-
-//   Serial.print("  Age: ");
-//   Serial.println(gps.location.age());
-
-//   Serial.println();
-// }
-
-
 // clears serial buffer
 void clearBuffer() {
   Serial.flush();
@@ -175,6 +126,7 @@ void clearBuffer() {
 // this prints the menu of the program
 void menu() {
   Serial.println();
+  Serial.println("Enter - update GPS location")
   Serial.println("x - record first point");
   Serial.println("v - record end point");
   Serial.println("e - exit program");

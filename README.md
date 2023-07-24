@@ -10,6 +10,7 @@ Once all parts are correctly wired together, you will need to:
 1. Import code into Arduino
 2. Wait outside until gps module gets signal (can take a few minutes)
 3. Follow  instructions given through Serial Monitor on ArduinoIDE
+    - enter to update GPS location
     - enter x to record beginning point
     - enter v to record end point and rating of sidewalk
     - enter e to exit program
