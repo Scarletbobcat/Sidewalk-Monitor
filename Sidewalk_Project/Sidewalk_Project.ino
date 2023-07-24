@@ -43,6 +43,7 @@ void setup() {
   ss.begin(GPSBaud);
 }
 
+
 void loop() {
   // always reads gps data
   while (ss.available() > 0) {
@@ -106,6 +107,7 @@ void loop() {
   }
 }
 
+
 // stolen from TinyGPSPlus example "Device Example"
 void displayInfo()
 {
@@ -167,6 +169,7 @@ void ssBuffer() {
     char dummy = ss.read();
   }
 }
+
 
 // clears serial buffer
 void clearBuffer() {

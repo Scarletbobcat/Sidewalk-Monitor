@@ -1,7 +1,7 @@
 import csv
 
 # open input and output files
-input_file = open("./asdf.csv", "r")
+input_file = open("./test.csv", "r")
 output_file = open("./data.csv", "w")
 
 # declaring object to read input file
@@ -31,7 +31,7 @@ for row in csvreader:
         lat_distance = lat2 - lat1
         long_distance = long2 - long1
     
-        # finding what interval for points in between should be
+        # finding interval for points in between
         lat_interval = lat_distance / num_points_between
         long_interval = long_distance / num_points_between
 
