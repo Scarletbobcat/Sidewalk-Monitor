@@ -1,7 +1,7 @@
 import csv
 from haversine import haversine, Unit
 
-
+# emulates the functionality of a switch
 def switch(lat, long, rating):
     if rating == 0:
         file0.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
@@ -16,7 +16,7 @@ def switch(lat, long, rating):
     elif rating == 5:
         file5.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
 
-
+# opening all files
 with open("./asdf.CSV", "r") as input_file, open("./Ratings/0.csv", "w") as file0, open("./Ratings/1.csv", "w") as file1, open("./Ratings/2.csv", "w") as file2, open("./Ratings/3.csv", "w") as file3, open("./Ratings/4.csv", "w") as file4,  open("./Ratings/5.csv", "w") as file5:
     
 
@@ -27,6 +27,7 @@ with open("./asdf.CSV", "r") as input_file, open("./Ratings/0.csv", "w") as file
     headers = []
     headers = next(csvreader)
 
+    # writing headers to rating csv's
     file0.write("Latitude,Longitude,Rating\n")
     file1.write("Latitude,Longitude,Rating\n")
     file2.write("Latitude,Longitude,Rating\n")
@@ -35,26 +36,28 @@ with open("./asdf.CSV", "r") as input_file, open("./Ratings/0.csv", "w") as file
     file5.write("Latitude,Longitude,Rating\n")
 
 
-    # writes points in between 2 coordinates to output file
+    # writes points in between 2 coordinates to each output file
     for row in csvreader:
         # reading in data
         data = []
         data = row
-        print(data)
         lat1 = float(data[0])
         long1 = float(data[1])
         lat2 = float(data[2])
         long2 = float(data[3])
+
+        # usese haversine formula to find distance between two latitude and longitude points in feet
         begin_point = (lat1,long1)
         end_point = (lat2,long2)
         distance_between = haversine(begin_point, end_point, unit = Unit.FEET)
 
-
+        # creates the number of points in between these points depending on the distance
         num_points_between = distance_between / 2
         
+        # if the points are different at all
         if (lat1 != lat2 or long1 != long2):
 
-            # finding distance
+            # finding distance between latitude and longitude of points
             lat_distance = lat2 - lat1
             long_distance = long2 - long1
         
