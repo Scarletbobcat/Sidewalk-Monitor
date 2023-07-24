@@ -50,8 +50,7 @@ void loop() {
   while (ss.available() > 0) {
     gps.encode(ss.read());
   }
-
-  if (gps.location.isValid() && gps.location.isUpdated() && (gps.location.age() <= 1500)) {
+  if (gps.location.isValid() && gps.location.isUpdated() && (gps.location.age() <= 1500) && (gps.satellites.value() > 2)) {
     menu();
     while (Serial.available() == 0) {
     }
@@ -68,7 +67,6 @@ void loop() {
         myFile.print(",");
         myFile.print(gps.location.lng(), 8);
         myFile.print(",");
-        // ssBuffer();
         break;
 
       // if v is entered, write latitude, longitude, and rating
@@ -77,7 +75,6 @@ void loop() {
         myFile.print(",");
         myFile.print(gps.location.lng(), 8);
         myFile.print(",");
-        // ssBuffer();
         // enter rating of sidewalk
         Serial.println("Input rating of sidewalk from 0-5:");
         int rating;
@@ -101,7 +98,6 @@ void loop() {
       // all other inputs
       default:
         Serial.println("Invalid Input");
-        // ssBuffer();
         break;
     }
     clearBuffer();
@@ -109,67 +105,60 @@ void loop() {
 }
 
 
-// stolen from TinyGPSPlus example "Device Example"
-void displayInfo()
-{
-  Serial.print(F("Location: ")); 
-  if (gps.location.isValid())
-  {
-    Serial.print(gps.location.lat(), 6);
-    Serial.print(F(","));
-    Serial.print(gps.location.lng(), 6);
-  }
-  else
-  {
-    Serial.print(F("INVALID"));
-  }
+// // stolen from TinyGPSPlus example "Device Example"
+// void displayInfo()
+// {
+//   Serial.print(F("Location: ")); 
+//   if (gps.location.isValid())
+//   {
+//     Serial.print(gps.location.lat(), 6);
+//     Serial.print(F(","));
+//     Serial.print(gps.location.lng(), 6);
+//   }
+//   else
+//   {
+//     Serial.print(F("INVALID"));
+//   }
 
-  Serial.print(F("  Date/Time: "));
-  if (gps.date.isValid())
-  {
-    Serial.print(gps.date.month());
-    Serial.print(F("/"));
-    Serial.print(gps.date.day());
-    Serial.print(F("/"));
-    Serial.print(gps.date.year());
-  }
-  else
-  {
-    Serial.print(F("INVALID"));
-  }
+//   Serial.print(F("  Date/Time: "));
+//   if (gps.date.isValid())
+//   {
+//     Serial.print(gps.date.month());
+//     Serial.print(F("/"));
+//     Serial.print(gps.date.day());
+//     Serial.print(F("/"));
+//     Serial.print(gps.date.year());
+//   }
+//   else
+//   {
+//     Serial.print(F("INVALID"));
+//   }
 
-  Serial.print(F(" "));
-  if (gps.time.isValid())
-  {
-    if (gps.time.hour() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.hour());
-    Serial.print(F(":"));
-    if (gps.time.minute() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.minute());
-    Serial.print(F(":"));
-    if (gps.time.second() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.second());
-    Serial.print(F("."));
-    if (gps.time.centisecond() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.centisecond());
-  }
-  else
-  {
-    Serial.print(F("INVALID"));
-  }
+//   Serial.print(F(" "));
+//   if (gps.time.isValid())
+//   {
+//     if (gps.time.hour() < 10) Serial.print(F("0"));
+//     Serial.print(gps.time.hour());
+//     Serial.print(F(":"));
+//     if (gps.time.minute() < 10) Serial.print(F("0"));
+//     Serial.print(gps.time.minute());
+//     Serial.print(F(":"));
+//     if (gps.time.second() < 10) Serial.print(F("0"));
+//     Serial.print(gps.time.second());
+//     Serial.print(F("."));
+//     if (gps.time.centisecond() < 10) Serial.print(F("0"));
+//     Serial.print(gps.time.centisecond());
+//   }
+//   else
+//   {
+//     Serial.print(F("INVALID"));
+//   }
 
-  Serial.print("  Age: ");
-  Serial.println(gps.location.age());
+//   Serial.print("  Age: ");
+//   Serial.println(gps.location.age());
 
-  Serial.println();
-}
-
-// clears software serial buffer
-void ssBuffer() {
-  while (ss.available() > 0) {
-    char dummy = ss.read();
-  }
-}
+//   Serial.println();
+// }
 
 
 // clears serial buffer
@@ -181,6 +170,7 @@ void clearBuffer() {
     Serial.begin(9600);
   }
 }
+
 
 // this prints the menu of the program
 void menu() {
