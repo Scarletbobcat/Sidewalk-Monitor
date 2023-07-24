@@ -1,52 +1,83 @@
 import csv
-
-# open input and output files
-input_file = open("./test.csv", "r")
-output_file = open("./data.csv", "w")
-
-# declaring object to read input file
-csvreader = csv.reader(input_file)
-
-# put headers from input file into array
-headers = []
-headers = next(csvreader)
-
-output_file.write("Latitude,Longitude,Rating\n")
+from haversine import haversine, Unit
 
 
-# writes points in between 2 coordinates to output file
-for row in csvreader:
-    # reading in data
-    data = []
-    data = row
-    lat1 = float(data[0])
-    long1 = float(data[1])
-    lat2 = float(data[2])
-    long2 = float(data[3])
+def switch(lat, long, rating):
+    if rating == 0:
+        file0.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
+    elif rating == 1:
+        file1.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
+    elif rating == 2:
+        file2.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
+    elif rating == 3:
+        file3.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
+    elif rating == 4:
+        file4.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
+    elif rating == 5:
+        file5.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
 
-    num_points_between = (float(6) - float(data[4])) ** 2
+
+with open("./asdf.CSV", "r") as input_file, open("./Ratings/0.csv", "w") as file0, open("./Ratings/1.csv", "w") as file1, open("./Ratings/2.csv", "w") as file2, open("./Ratings/3.csv", "w") as file3, open("./Ratings/4.csv", "w") as file4,  open("./Ratings/5.csv", "w") as file5:
     
-    if (lat1 != lat2 or long1 != long2):
-        # finding distance
-        lat_distance = lat2 - lat1
-        long_distance = long2 - long1
-    
-        # finding interval for points in between
-        lat_interval = lat_distance / num_points_between
-        long_interval = long_distance / num_points_between
 
-        # writes each new point between the 2 by adding interval each time
-        for i in range(int(num_points_between)):
-            new_lat = lat1 + (i * lat_interval)
-            new_long = long1 + (i * long_interval)
-            new_rating = 5 - int(data[4])
-            output_file.write(str(new_lat) + "," + str(new_long) + "," + str(new_rating) + "\n")
+    # declaring object to read input file
+    csvreader = csv.reader(input_file)
 
-    # writes one point if beginning and end points are the same
-    else:
-        new_rating = 5 - int(data[4])
-        output_file.write(str(lat1) + "," + str(long1) + "," + str(new_rating) + "\n")
+    # put headers from input file into array
+    headers = []
+    headers = next(csvreader)
 
-# closing files
-output_file.close()
-input_file.close()
+    file0.write("Latitude,Longitude,Rating\n")
+    file1.write("Latitude,Longitude,Rating\n")
+    file2.write("Latitude,Longitude,Rating\n")
+    file3.write("Latitude,Longitude,Rating\n")
+    file4.write("Latitude,Longitude,Rating\n")
+    file5.write("Latitude,Longitude,Rating\n")
+
+
+    # writes points in between 2 coordinates to output file
+    for row in csvreader:
+        # reading in data
+        data = []
+        data = row
+        print(data)
+        lat1 = float(data[0])
+        long1 = float(data[1])
+        lat2 = float(data[2])
+        long2 = float(data[3])
+        begin_point = (lat1,long1)
+        end_point = (lat2,long2)
+        distance_between = haversine(begin_point, end_point, unit = Unit.FEET)
+
+
+        num_points_between = distance_between / 2
+        
+        if (lat1 != lat2 or long1 != long2):
+
+            # finding distance
+            lat_distance = lat2 - lat1
+            long_distance = long2 - long1
+        
+            # finding interval for points in between
+            lat_interval = lat_distance / num_points_between
+            long_interval = long_distance / num_points_between
+
+                
+            # writes each new point between the 2 by adding interval each time
+            for i in range(int(num_points_between)):
+                new_lat = lat1 + (i * lat_interval)
+                new_long = long1 + (i * long_interval)
+                switch(new_lat, new_long, int(data[4]))
+
+        else:
+            switch(lat1, long1, int(data[4]))
+
+
+    # closing files
+    file0.close()
+    file1.close()
+    file2.close()
+    file3.close()
+    file4.close()
+    file5.close()
+    input_file.close()

@@ -3,11 +3,9 @@
 #include <SoftwareSerial.h>
 
 // declaration of objects and variables
-int CS = 10;
-File data;
+File myFile;
 TinyGPSPlus gps;
 char character;
-char empty;
 
 // setting up connection ports
 static const int RXPin = 2, TXPin = 3;
@@ -19,28 +17,31 @@ SoftwareSerial ss(RXPin, TXPin);
 
 
 void setup() {
-  SD.begin(10);
+  Serial.begin(9600);
+  ss.begin(GPSBaud);
 
   if (!SD.begin(10)) {
     Serial.println("Initialization failed!");
     delay(100);
-    while(1);
+    exit(0);
   }
 
-  // creates file if "data.csv" does not exist
+  // creates file if "first_data.csv" does not exist
   if (!SD.exists("data.csv")) {
-    data = SD.open("data.csv", FILE_WRITE);
-    data.println("latitude, longitude, rating");
-    data.println();
-    delay(100);
+    myFile = SD.open("data.csv", FILE_WRITE);
+    myFile.println("latitude, longitude, rating");
+    myFile.println();
   // if "data.csv" exists, goes to end of file to begin writing
   } else {
-    data = SD.open("data.csv", FILE_WRITE);
-    data.seek(EOF);
+    myFile = SD.open("data.csv", FILE_WRITE);
+    myFile.seek(EOF);
   }
 
-  Serial.begin(9600);
-  ss.begin(GPSBaud);
+  if (!SD.exists("data.csv")) {
+    Serial.println("data.csv does not exist");
+    delay(100);
+    exit(0);
+  }
 }
 
 
@@ -63,22 +64,20 @@ void loop() {
 
       // if x is entered, write latitude and longitude
       case 'x':
-        displayInfo();
-        data.print(gps.location.lat(), 8);
-        data.print(",");
-        data.print(gps.location.lng(), 8);
-        data.print(",");
-        ssBuffer();
+        myFile.print(gps.location.lat(), 8);
+        myFile.print(",");
+        myFile.print(gps.location.lng(), 8);
+        myFile.print(",");
+        // ssBuffer();
         break;
 
       // if v is entered, write latitude, longitude, and rating
       case 'v':
-        displayInfo();
-        data.print(gps.location.lat(), 8);
-        data.print(",");
-        data.print(gps.location.lng(), 8);
-        data.print(",");
-        ssBuffer();
+        myFile.print(gps.location.lat(), 8);
+        myFile.print(",");
+        myFile.print(gps.location.lng(), 8);
+        myFile.print(",");
+        // ssBuffer();
         // enter rating of sidewalk
         Serial.println("Input rating of sidewalk from 0-5:");
         int rating;
@@ -88,19 +87,21 @@ void loop() {
         clearBuffer();
         Serial.print("Rating: ");
         Serial.println(rating);
-        data.println(rating);
+        myFile.println(rating);
         break;
 
       // closes file and exits program
       case 'e':
-        data.close();
+        myFile.close();
+        Serial.println("Closing...");
+        delay(500);
         exit(0);
         break;
 
       // all other inputs
       default:
         Serial.println("Invalid Input");
-        ssBuffer();
+        // ssBuffer();
         break;
     }
     clearBuffer();
