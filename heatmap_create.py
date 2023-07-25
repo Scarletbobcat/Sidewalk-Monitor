@@ -12,15 +12,13 @@ for i in range(6):
 
     # creating basic map
     m = leafmap.Map()
-
-    # adding heatmap layer with settings
     m.add_heatmap(
         filepath,
         latitude="Latitude",
         longitude='Longitude',
         value="Rating",
         name="Heat map",
-        radius=15,
+        radius=30,
     )
 
     # creates heatmap

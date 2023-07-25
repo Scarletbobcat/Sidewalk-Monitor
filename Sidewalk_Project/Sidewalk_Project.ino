@@ -35,6 +35,7 @@ void setup() {
   } else {
     myFile = SD.open("data.csv", FILE_WRITE);
     myFile.seek(EOF);
+    myFile.println();
   }
 
   if (!SD.exists("data.csv")) {
@@ -50,7 +51,7 @@ void loop() {
   while (ss.available() > 0) {
     gps.encode(ss.read());
   }
-  if (gps.location.isValid() && gps.location.isUpdated() && (gps.location.age() <= 1500) && (gps.satellites.value() > 2)) {
+  if (gps.location.isValid() && gps.location.isUpdated() && (gps.location.age() <= 500) && (gps.satellites.value() > 2)) {
     menu();
 
     // reads character input from Serial Monitor
@@ -91,7 +92,7 @@ void loop() {
 
       // updates gps location
       case 10:
-        Serial.println("Location updated!")
+        Serial.println("Location updated!");
         break;
 
       // closes file and exits program
@@ -126,7 +127,7 @@ void clearBuffer() {
 // this prints the menu of the program
 void menu() {
   Serial.println();
-  Serial.println("Enter - update GPS location")
+  Serial.println("Enter - update GPS location");
   Serial.println("x - record first point");
   Serial.println("v - record end point");
   Serial.println("e - exit program");
