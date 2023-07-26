@@ -11,15 +11,16 @@ for i in range(6):
     filepath = filepaths[i]
 
     # creating basic map
-    m = leafmap.Map()
+    m = leafmap.Map(location = [41.070122, -80.663556], zoom_start = 15)
     m.add_heatmap(
         filepath,
         latitude="Latitude",
         longitude='Longitude',
         value="Rating",
         name="Heat map",
-        radius=30,
+        radius=10,
     )
+
 
     # creates heatmap
     m
