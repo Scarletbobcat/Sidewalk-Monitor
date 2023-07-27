@@ -14,7 +14,7 @@ Once all parts are correctly wired together, you will need to:
     - enter x to record beginning point
     - enter v to record end point and rating of sidewalk
     - enter e to exit program
-4. Once finished, __be sure to close the file by inputting "e" to the arduino through the Serial Monitor of the ArduinoIDE__
+4. Once finished, **_be sure to close the file by inputting "e" to the arduino through the Serial Monitor of the ArduinoIDE_**
 5. Plug microSD into laptop or computer and drag file into same directory as the python scripts
 6. Run "csv_edit.py"
 7. Run "heatmap_create.py"
