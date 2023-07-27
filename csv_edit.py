@@ -3,9 +3,7 @@ from haversine import haversine, Unit
 
 # emulates the functionality of a switch
 def switch(lat, long, rating):
-    if rating == 0:
-        file0.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
-    elif rating == 1:
+    if rating == 1:
         file1.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
     elif rating == 2:
         file2.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
@@ -17,7 +15,7 @@ def switch(lat, long, rating):
         file5.write(str(lat) + "," + str(long) + "," + str(rating) + "\n")
 
 # opening all files
-with open("./DATA.CSV", "r") as input_file, open("./Ratings/0.csv", "w") as file0, open("./Ratings/1.csv", "w") as file1, open("./Ratings/2.csv", "w") as file2, open("./Ratings/3.csv", "w") as file3, open("./Ratings/4.csv", "w") as file4,  open("./Ratings/5.csv", "w") as file5:
+with open("./DATA.CSV", "r") as input_file, open("./Ratings/1.csv", "w") as file1, open("./Ratings/2.csv", "w") as file2, open("./Ratings/3.csv", "w") as file3, open("./Ratings/4.csv", "w") as file4,  open("./Ratings/5.csv", "w") as file5:
     
 
     # declaring object to read input file
@@ -30,7 +28,6 @@ with open("./DATA.CSV", "r") as input_file, open("./Ratings/0.csv", "w") as file
 
 
     # writing headers to rating csv's
-    file0.write("Latitude,Longitude,Rating\n")
     file1.write("Latitude,Longitude,Rating\n")
     file2.write("Latitude,Longitude,Rating\n")
     file3.write("Latitude,Longitude,Rating\n")
@@ -81,7 +78,6 @@ with open("./DATA.CSV", "r") as input_file, open("./Ratings/0.csv", "w") as file
 
 
     # closing files
-    file0.close()
     file1.close()
     file2.close()
     file3.close()
