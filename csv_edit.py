@@ -40,7 +40,7 @@ with open("./DATA.CSV", "r") as input_file, open("./Ratings/1.csv", "w") as file
         # reading in data
         data = []
         data = row
-        if (len(data[0]) != 0):
+        if (len(data[0]) != 0) and (len(data[3]) != 0):
                 
             lat1 = float(data[0])
             long1 = float(data[1])
