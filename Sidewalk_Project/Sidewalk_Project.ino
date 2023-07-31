@@ -127,6 +127,10 @@ void clearBuffer() {
 // this prints the menu of the program
 void menu() {
   Serial.println();
+  for (int i = 0; i < 50; i++) {
+    Serial.print(*)
+  }
+  Serial.println();
   Serial.println("Enter - update GPS location");
   Serial.println("x - record first point");
   Serial.println("v - record end point");
